@@ -1,7 +1,12 @@
 # This dockerfile add all oh-my-zsh and entrypoint file upon the base image
 # Modify the first line the change the base image
 
-FROM celinachild/orbslam2:latestcd 
+FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu18.04
+
+# install common packages
+RUN apt-get update && apt-get install -y \
+    wget curl git \
+    && rm -rf /var/lib/apt/lists/*
 
 #########################
 # Install zsh and OMzsh #
@@ -16,7 +21,4 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -p https://github.com/zsh-users/zsh-syntax-highlighting\
     -t tjkirch
 
-# Overwrite the entry point to zsh
-COPY ./ros_entrypoint.zsh /
-ENTRYPOINT ["/ros_entrypoint.zsh"]
 CMD ["zsh"]

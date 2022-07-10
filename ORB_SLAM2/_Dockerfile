@@ -1,0 +1,34 @@
+# This dockerfile add pangolin and orb-slam2 upon the base image
+# Modify the first line the change the base image
+
+FROM cyqian97/cuda:11.3.1-cudnn8-devel-ubuntu18.04-ros-melodic-opencv3.2.0
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -y update
+
+# install Pangolin
+RUN apt-get install -y libglew-dev \
+    && git clone https://github.com/stevenlovegrove/Pangolin.git \
+    && cd Pangolin \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make -j16 \
+    && make install
+
+# # install Eigen
+# ARG EIGEN_VERSION="3.1.0"
+# RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/$EIGEN_VERSION/eigen-$EIGEN_VERSION.tar.gz -o eigen.tar.gz \
+#   && mkdir /usr/include/eigen \
+#   # rename first directory to be eigen instead of eigen-eigen-*
+#   && tar -xf eigen.tar.gz --strip-components=1 -C /usr/include/eigen \
+#   && rm eigen.tar.gz
+
+# build ORB-SLAM2
+RUN git clone https://github.com/cyqian97/ORB_SLAM2.git ORB_SLAM2 \
+  && cd ORB_SLAM2 \
+  && chmod +x build.sh \
+  && ./build.sh
+
+ENTRYPOINT ["/ros_entrypoint.zsh"]
+CMD ["zsh"]
