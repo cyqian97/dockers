@@ -33,7 +33,4 @@ RUN chsh -s $(which zsh)
 
 
 
-# Overwrite the entry point to zsh
-COPY ./ros_entrypoint.zsh /
-ENTRYPOINT ["/ros_entrypoint.zsh"]
 CMD ["zsh"]
