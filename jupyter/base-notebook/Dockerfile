@@ -3,7 +3,7 @@
 
 # Ubuntu 20.04 (focal)
 # https://hub.docker.com/_/ubuntu/?tab=tags&name=focal
-ARG ROOT_CONTAINER=cyqian97/orb-slam2:latest 
+ARG ROOT_CONTAINER=nvidia/cuda:11.0.3-cudnn8-devel-ubuntu20.04
 
 FROM $ROOT_CONTAINER
 
