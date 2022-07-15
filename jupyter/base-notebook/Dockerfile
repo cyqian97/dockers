@@ -42,7 +42,7 @@ RUN apt-get update --yes && \
     # - tini is installed as a helpful container entrypoint that reaps zombie
     #   processes and such of the actual executable we want to start, see
     #   https://github.com/krallin/tini#why-tini for details.
-    # tini \
+    tini \
     wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
@@ -140,8 +140,8 @@ RUN set -x && \
 EXPOSE 8888
 
 # Configure container startup
-# ENTRYPOINT ["tini", "-g", "--"]
-# CMD ["start-notebook.sh"]
+ENTRYPOINT ["tini", "-g", "--"]
+CMD ["start-notebook.sh"]
 
 # Copy local files as late as possible to avoid cache busting
 COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
@@ -163,10 +163,7 @@ HEALTHCHECK  --interval=15s --timeout=3s --start-period=5s --retries=3 \
     CMD wget -O- --no-verbose --tries=1 --no-check-certificate \
     http${GEN_CERT:+s}://localhost:8888${JUPYTERHUB_SERVICE_PREFIX:-/}api || exit 1
 
-# # Switch back to jovyan to avoid accidental container runs as root
+# Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
 
-# WORKDIR "${HOME}"
-
-ENTRYPOINT ["/ros_entrypoint.zsh"]
-CMD ["zsh"]
+WORKDIR "${HOME}"
