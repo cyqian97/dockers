@@ -90,10 +90,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-melodic-desktop-full=1.4.1-0* \
     && rm -rf /var/lib/apt/lists/*
 
-# Install python tools
-RUN apt-get update && apt-get install -y \
-    python3-catkin-tools python3-osrf-pycommon \
+###########################
+# install common packages #
+###########################
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget curl git python3-catkin-tools python3-osrf-pycommon \
     && rm -rf /var/lib/apt/lists/*
+
+#########################
+# Install zsh and OMzsh #
+#########################
+RUN apt-get update -y
+RUN apt-get install -yq zsh 
+RUN rm -rf /var/lib/apt/lists/*
+RUN chsh -s $(which zsh)
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
+    -p git \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-syntax-highlighting\
+    -t tjkirch
 
 # Overwrite the entry point to zsh
 COPY ./ros_entrypoint.zsh /
