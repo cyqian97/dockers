@@ -1,7 +1,7 @@
 # This dockerfile add all oh-my-zsh and entrypoint file upon the base image
 # Modify the first line the change the base image
 
-FROM nvidia/cuda:11.6.0-cudnn8-devel-ubuntu20.04
+FROM ubuntu:22.04
 
 
 ###########################
@@ -27,6 +27,9 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -p git \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting\
-    -t tjkirch \
+    -t tjkirch     
+
+# Overwrite the entry point to zsh
+WORKDIR /home
 
 CMD ["zsh"]
