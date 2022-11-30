@@ -48,6 +48,7 @@ RUN unzip opencv.zip
 RUN unzip opencv_contrib.zip
 RUN mkdir -p build && cd build && \
     cmake -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-4.6.0/modules \
+     -D WITH_OPENMP=ON \
     -D BUILD_opencv_alphamat=OFF \
     -D BUILD_opencv_aruco=OFF \
     -D BUILD_opencv_barcode=OFF \
@@ -77,7 +78,7 @@ RUN mkdir -p build && cd build && \
     cmake --build .
 
 # cleanup package manager
-# RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
 
 
 # Overwrite the entry point to zsh

@@ -23,7 +23,6 @@ RUN apt-get install -y \
 #########################
 RUN apt-get update -y
 RUN apt-get install -yq zsh 
-RUN rm -rf /var/lib/apt/lists/*
 RUN chsh -s $(which zsh)
 # RUN chsh -s /bin/zsh
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
@@ -31,6 +30,8 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-syntax-highlighting
     # -t tjkirch     
+
+RUN rm -rf /var/lib/apt/lists/*
 
 # Overwrite the entry point to zsh
 # WORKDIR /home
