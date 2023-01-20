@@ -1,8 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 ARG OWNER=jupyter
-ARG BASE_CONTAINER=cyqian97/cuda:11.0.3-cudnn8-devel-ubuntu20.04-jupyterbase
-FROM $BASE_CONTAINER
+ARG BASE_CONTAINER=$OWNER/base-notebook
+FROM cyqian97/cuda:10.1-cudnn8-devel-ubuntu18.04-jupyter-base
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
@@ -21,8 +21,6 @@ RUN apt-get update --yes && \
     tzdata \
     unzip \
     vim-tiny \
-    # Inkscape is installed to be able to convert SVG files
-    inkscape \
     # git-over-ssh
     openssh-client \
     # less is needed to run help in R
@@ -32,7 +30,9 @@ RUN apt-get update --yes && \
     # https://nbconvert.readthedocs.io/en/latest/install.html#installing-tex
     texlive-xetex \
     texlive-fonts-recommended \
-    texlive-plain-generic && \
+    texlive-plain-generic \
+    # Enable clipboard on Linux host systems
+    xclip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create alternative for nano -> nano-tiny
@@ -40,3 +40,6 @@ RUN update-alternatives --install /usr/bin/nano nano /bin/nano-tiny 10
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
+
+# Add R mimetype option to specify how the plot returns from R to the browser
+COPY --chown=${NB_UID}:${NB_GID} Rprofile.site /opt/conda/lib/R/etc/
