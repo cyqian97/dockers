@@ -39,6 +39,12 @@ RUN mkdir miniconda3 &&\
     miniconda3/bin/conda init bash &&\
     miniconda3/bin/conda init zsh
 
+######################
+# ROS extra packages #
+######################
+RUN apt-get install -y\
+    ros-melodic-catkin python3-catkin-tools python3-osrf-pycommon
+
 # Cleanup
 # Do not run the cleanup before the end of all installation
 # Early cleanup make apt-get update slower and may cause packages to disappear
