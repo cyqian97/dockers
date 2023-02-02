@@ -1,8 +1,9 @@
 # This dockerfile add all oh-my-zsh and entrypoint file upon the base image
 # Modify the first line the change the base image
 
-FROM nvidia/cuda:10.1-cudnn8-devel-ubuntu18.04
+FROM ros:melodic-perception-bionic
 
+WORKDIR /
 
 ###########################
 # install common packages #
@@ -25,11 +26,28 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -p https://github.com/zsh-users/zsh-syntax-highlighting
     # -t tjkirch     
 
+COPY ./.zshrc /root/
+COPY ./.p10k.zsh /root/
+
+#####################
+# Install Miniconda #
+#####################
+RUN mkdir miniconda3 &&\
+    wget https://repo.anaconda.com/miniconda/Miniconda3-py37_22.11.1-1-Linux-x86_64.sh -O Miniconda3.sh &&\
+    bash Miniconda3.sh -b -u -p miniconda3 &&\
+    rm -rf Miniconda3.sh &&\
+    miniconda3/bin/conda init bash &&\
+    miniconda3/bin/conda init zsh
+
+# Cleanup
 # Do not run the cleanup before the end of all installation
 # Early cleanup make apt-get update slower and may cause packages to disappear
-RUN rm -rf /var/lib/apt/lists/* 
+# RUN rm -rf /var/lib/apt/lists/* 
 
-# Overwrite the entry point to zsh
-# WORKDIR /home
+#############################
+# Overwrite the entry point #
+#############################
+COPY ./ros_entrypoint.zsh /
+ENTRYPOINT ["/ros_entrypoint.zsh"]
 
 CMD ["zsh"]
