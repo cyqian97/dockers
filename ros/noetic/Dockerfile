@@ -3,6 +3,12 @@
 
 FROM cyqian97/ubuntu:focal AS base
 
+# setup environment
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+ENV ROS_DISTRO noetic
+
 ####################
 # Install ros-core #
 ####################
@@ -24,14 +30,6 @@ RUN echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.
 
 # setup keys
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-
-# setup environment
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
-
-ENV ROS_DISTRO noetic
-
-
 
 ###############
 # Install ros #
@@ -57,7 +55,7 @@ RUN rosdep init && \
 # install common packages #
 ###########################
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget curl git python3-catkin-tools python3-osrf-pycommon \
+    wget curl git python3-catkin-tools python3-osrf-pycommon ros-$ROS_DISTRO-catkin\
     && rm -rf /var/lib/apt/lists/*
 
 #########################
