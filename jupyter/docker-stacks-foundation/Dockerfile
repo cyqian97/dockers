@@ -3,7 +3,10 @@
 
 # Ubuntu 22.04 (jammy)
 # https://hub.docker.com/_/ubuntu/tags?page=1&name=jammy
-ARG ROOT_CONTAINER=cyqian97/cuda:10.1-cudnn8-devel-ubuntu18.04
+
+# The first image to build
+
+ARG ROOT_CONTAINER=cyqian97/ubuntu:22.04
 
 FROM $ROOT_CONTAINER
 

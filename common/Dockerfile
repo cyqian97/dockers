@@ -1,7 +1,7 @@
 # This dockerfile add all oh-my-zsh and entrypoint file upon the base image
 # Modify the first line the change the base image
 
-FROM ros:melodic-perception-bionic
+FROM ubuntu:focal
 
 WORKDIR /
 
@@ -32,18 +32,18 @@ COPY ./.p10k.zsh /root/
 #####################
 # Install Miniconda #
 #####################
-RUN mkdir miniconda3 &&\
-    wget https://repo.anaconda.com/miniconda/Miniconda3-py37_22.11.1-1-Linux-x86_64.sh -O Miniconda3.sh &&\
-    bash Miniconda3.sh -b -u -p miniconda3 &&\
-    rm -rf Miniconda3.sh &&\
-    miniconda3/bin/conda init bash &&\
-    miniconda3/bin/conda init zsh
+# RUN mkdir miniconda3 &&\
+#     wget https://repo.anaconda.com/miniconda/Miniconda3-py37_22.11.1-1-Linux-x86_64.sh -O Miniconda3.sh &&\
+#     bash Miniconda3.sh -b -u -p miniconda3 &&\
+#     rm -rf Miniconda3.sh &&\
+#     miniconda3/bin/conda init bash &&\
+#     miniconda3/bin/conda init zsh
 
 ######################
 # ROS extra packages #
 ######################
-RUN apt-get install -y\
-    ros-melodic-catkin python3-catkin-tools python3-osrf-pycommon
+# RUN apt-get install -y\
+#     ros-melodic-catkin python3-catkin-tools python3-osrf-pycommon
 
 # Cleanup
 # Do not run the cleanup before the end of all installation
@@ -53,7 +53,7 @@ RUN apt-get install -y\
 #############################
 # Overwrite the entry point #
 #############################
-COPY ./ros_entrypoint.zsh /
-ENTRYPOINT ["/ros_entrypoint.zsh"]
+# COPY ./ros_entrypoint.zsh /
+# ENTRYPOINT ["/ros_entrypoint.zsh"]
 
-CMD ["zsh"]
+# CMD ["zsh"]

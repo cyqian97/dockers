@@ -1,8 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG OWNER=jupyter
-ARG BASE_CONTAINER=$OWNER/minimal-notebook
-FROM $BASE_CONTAINER
+# ARG OWNER=jupyter
+# ARG BASE_CONTAINER=$OWNER/minimal-notebook
+FROM cyqian97/ubuntu:22.04-jupyter-minimal
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 

@@ -1,8 +1,8 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-ARG OWNER=jupyter
-ARG BASE_CONTAINER=$OWNER/docker-stacks-foundation
-FROM cyqian97/cuda:10.1-cudnn8-devel-ubuntu18.04-jupyter
+# ARG OWNER=jupyter
+# ARG BASE_CONTAINER=$OWNER/docker-stacks-foundation
+FROM cyqian97/ubuntu:22.04-jupyter-foundation
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 

@@ -26,11 +26,13 @@ ENV LC_ALL C.UTF-8
 ENV ROS_DISTRO galactic
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     ros-galactic-desktop=0.9.3-2* \
-    ros-$ROS_DISTRO-ros2bag \
     python3-colcon-common-extensions \
+    ros-$ROS_DISTRO-ros2bag \
     libeigen3-dev libboost-all-dev libceres-dev \
     && rm -rf /var/lib/apt/lists/*
+
 
 COPY ./ros_entrypoint.zsh /
 
