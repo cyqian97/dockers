@@ -77,8 +77,11 @@ RUN mkdir -p build && cd build && \
     ../opencv-4.6.0 && \
     cmake --build .
 
+# Install openmp
+RUN apt-get install libomp-dev -y
+
 # cleanup package manager
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # Overwrite the entry point to zsh
