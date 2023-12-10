@@ -1,7 +1,7 @@
 # This dockerfile add all oh-my-zsh and entrypoint file upon the base image
 # Modify the first line the change the base image
 
-FROM cyqian97/vins-fusion-melodic
+FROM cyqian97/ubuntu:focal
 
 WORKDIR /
 
@@ -14,8 +14,11 @@ WORKDIR /
 #     wget curl git zsh \
 #     && chsh -s $(which zsh)
 
+RUN apt-get update -y &&  apt-get install -y build-essential python3 python3-pip
+
 # RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 # RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+
 
 #################
 # Install OMzsh #
@@ -50,21 +53,21 @@ WORKDIR /
 # Install noVNC #
 #################
 # Keep the entrypoint as /ros_entrypoint.zsh is ROS is used. Overwrite m
-WORKDIR /root
+# WORKDIR /root
 
-RUN apt-get update -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y install tigervnc-standalone-server novnc openbox lxpanel && \
-    apt-get clean
+# RUN apt-get update -y && \
+#     DEBIAN_FRONTEND=noninteractive apt-get -y install tigervnc-standalone-server novnc openbox lxpanel && \
+#     apt-get clean
 
 
-COPY ./startVNC.sh /
+# COPY ./startVNC.sh /
 
-RUN echo "export DISPLAY=:1" >> .bashrc && \
-    echo "export DISPLAY=:1" >> .zshrc && \
-    /bin/bash -c "echo -e 'password\npassword\nn' | vncpasswd" && \
-    openssl req -x509 -nodes -newkey rsa:3072 -keyout novnc.pem -out novnc.pem -days 3650 -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=NA/emailAddress=NA" && \
-    printf "lxpanel &\n sleep 3 \n openbox-session" >.xinit && \
-    chmod 777 /startVNC.sh /root/.xinit
+# RUN echo "export DISPLAY=:1" >> .bashrc && \
+#     echo "export DISPLAY=:1" >> .zshrc && \
+#     /bin/bash -c "echo -e 'password\npassword\nn' | vncpasswd" && \
+#     openssl req -x509 -nodes -newkey rsa:3072 -keyout novnc.pem -out novnc.pem -days 3650 -subj "/C=NA/ST=NA/L=NA/O=NA/OU=NA/CN=NA/emailAddress=NA" && \
+#     printf "lxpanel &\n sleep 3 \n openbox-session" >.xinit && \
+#     chmod 777 /startVNC.sh /root/.xinit
 
 
 # Cleanup
@@ -76,7 +79,7 @@ RUN echo "export DISPLAY=:1" >> .bashrc && \
 #############################
 # Overwrite the entry point #
 #############################
-COPY ./ros_entrypoint.zsh /
-ENTRYPOINT ["/ros_entrypoint.zsh"]
+# COPY ./ros_entrypoint.zsh /
+# ENTRYPOINT ["/ros_entrypoint.zsh"]
 
 CMD ["zsh"]
