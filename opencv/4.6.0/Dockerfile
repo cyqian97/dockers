@@ -6,7 +6,7 @@ FROM cyqian97/ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG OPENCV_VERSION="4.8.0"
+ARG OPENCV_VERSION="4.2.0"
 
 # 0. Preparation
 # 0.0 setup timezone to avoid interaction

@@ -1,18 +1,17 @@
 # This dockerfile add all oh-my-zsh and entrypoint file upon the base image
 # Modify the first line the change the base image
 
-FROM cyqian97/ubuntu:focal
+FROM openvins:humble
 
 WORKDIR /
 
 ###########################
 # install common packages #
 ###########################
-# Put everything in a single RUN command to decrease layer number and image size
-# RUN apt-get update -y \
-#     && apt-get install -yq \
-#     wget curl git zsh \
-#     && chsh -s $(which zsh)
+RUN apt-get update -y \
+    && apt-get install -yq \
+    wget curl git zsh \
+    && chsh -s $(which zsh)
 
 RUN apt-get update -y &&  apt-get install -y build-essential python3 python3-pip
 
@@ -23,14 +22,14 @@ RUN apt-get update -y &&  apt-get install -y build-essential python3 python3-pip
 #################
 # Install OMzsh #
 #################
-# RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.2/zsh-in-docker.sh)" -- \
-#     -p git \
-#     -p https://github.com/zsh-users/zsh-autosuggestions \
-#     -p https://github.com/zsh-users/zsh-syntax-highlighting
-#     # -t tjkirch     
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.2.0/zsh-in-docker.sh)" -- \
+    -p git \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-syntax-highlighting
+    # -t tjkirch     
 
-# COPY ./.zshrc /root/
-# COPY ./.p10k.zsh /root/
+COPY ./.zshrc /root/
+COPY ./.p10k.zsh /root/
 
 #####################
 # Install Miniconda #
@@ -42,23 +41,16 @@ RUN apt-get update -y &&  apt-get install -y build-essential python3 python3-pip
 #     miniconda3/bin/conda init bash &&\
 #     miniconda3/bin/conda init zsh
 
-######################
-# ROS extra packages #
-######################
-# RUN apt-get install -y\
-#     ros-melodic-catkin python3-catkin-tools python3-osrf-pycommon
 
 
 #################
 # Install noVNC #
 #################
-# Keep the entrypoint as /ros_entrypoint.zsh is ROS is used. Overwrite m
 # WORKDIR /root
 
 # RUN apt-get update -y && \
 #     DEBIAN_FRONTEND=noninteractive apt-get -y install tigervnc-standalone-server novnc openbox lxpanel && \
 #     apt-get clean
-
 
 # COPY ./startVNC.sh /
 
@@ -70,7 +62,21 @@ RUN apt-get update -y &&  apt-get install -y build-essential python3 python3-pip
 #     chmod 777 /startVNC.sh /root/.xinit
 
 
-# Cleanup
+######################
+# ROS extra packages #
+######################
+# RUN apt-get install -y\
+#     ros-melodic-catkin python3-catkin-tools python3-osrf-pycommon
+
+#######################
+# ROS2 extra packages #
+#######################
+# RUN apt-get install -y\
+#     ros-humble-rviz2 libeigen3-dev libopencv-dev 
+
+###########
+# Cleanup #
+###########
 # Do not run the cleanup before the end of all installation
 # Early cleanup make apt-get update slower and may cause packages to disappear
 # RUN rm -rf /var/lib/apt/lists/* 
@@ -79,7 +85,7 @@ RUN apt-get update -y &&  apt-get install -y build-essential python3 python3-pip
 #############################
 # Overwrite the entry point #
 #############################
-# COPY ./ros_entrypoint.zsh /
-# ENTRYPOINT ["/ros_entrypoint.zsh"]
+COPY ./ros_entrypoint.zsh /
+ENTRYPOINT ["/ros_entrypoint.zsh"]
 
 CMD ["zsh"]
