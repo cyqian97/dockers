@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  ros:
+    image: cyqian97/ros:noetic
+    container_name: ros_container
+    environment:
+      - DISPLAY=${DISPLAY}              # Pass display environment variable
+      - QT_X11_NO_MITSHM=1              # Avoid MIT-SHM errors in Qt apps
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # Share X11 socket
+      - ${HOME}/.Xauthority:/root/.Xauthority:rw  # Share X11 auth file
+    command: zsh
+    network_mode: host                   # Needed for ROS networking on host
+    stdin_open: true
+    tty: true
